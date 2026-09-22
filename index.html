@@ -695,71 +695,251 @@
       </div>
     </section>
 
-    <!-- ADMIN SYSTEM ARCHITECTURAL PREVIEW -->
+    <!-- ADMIN PARTICIPANT MANAGEMENT DASHBOARD -->
     <section class="section admin-preview-section" id="adminPreview">
       <div class="container">
         <div class="section-header text-center">
-          <span class="section-sub-badge badge-prototype">⚙️ Architectural Preview</span>
-          <h2 class="section-title">Admin System & Future Backend Plan</h2>
+          <span class="section-sub-badge badge-prototype">⚙️ Admin Control Panel</span>
+          <h2 class="section-title">Participant Management System</h2>
           <p class="section-description">
-            Design preview for the Mattaparthi Vari Pallem committee management workflow.
+            Complete administrative portal for Mattaparthi Vari Pallem committee to manage, edit, update, and search event registrations.
           </p>
         </div>
 
         <div class="admin-preview-box glass-card">
-          <!-- Architectural Transparency Notice -->
+          <!-- Real-Time Stats Grid -->
+          <div class="admin-stats-row">
+            <div class="admin-stat-card">
+              <span class="stat-title">Total Registered</span>
+              <span class="stat-value" id="adminTotalCount">0</span>
+              <small class="stat-sub">Actual Database Count</small>
+            </div>
+            <div class="admin-stat-card">
+              <span class="stat-title">Active Tickets</span>
+              <span class="stat-value text-gold" id="adminActiveCount">0</span>
+              <small class="stat-sub">Confirmed Entries</small>
+            </div>
+            <div class="admin-stat-card">
+              <span class="stat-title">Next Serial Number</span>
+              <span class="stat-value text-saffron" id="adminNextSerial">001</span>
+              <small class="stat-sub">Next Allocation</small>
+            </div>
+            <div class="admin-stat-card">
+              <span class="stat-title">Available Slots</span>
+              <span class="stat-value" id="adminSlotsLeft">99</span>
+              <small class="stat-sub">&lt; 100 Cap</small>
+            </div>
+          </div>
+
+          <!-- Admin Toolbar: Search, Filters, Export & Reset -->
+          <div class="admin-toolbar-wrap">
+            <div class="admin-search-box">
+              <span class="search-icon">🔍</span>
+              <input 
+                type="text" 
+                id="adminSearchInput" 
+                class="form-control search-control" 
+                placeholder="Search by Name, Mobile, or Serial / MMP-XXX..." 
+                aria-label="Admin search registrations"
+              >
+            </div>
+
+            <div class="admin-filters-group">
+              <select id="adminStatusFilter" class="form-control select-control" aria-label="Filter by registration status">
+                <option value="ALL">All Statuses</option>
+                <option value="Active">Active Entries</option>
+                <option value="Cancelled">Cancelled Entries</option>
+              </select>
+
+              <select id="adminSortFilter" class="form-control select-control" aria-label="Sort registrations">
+                <option value="SERIAL_ASC">Serial: 001 ➔ 099</option>
+                <option value="SERIAL_DESC">Serial: 099 ➔ 001</option>
+                <option value="NAME_ASC">Name: A ➔ Z</option>
+              </select>
+
+              <button type="button" class="btn btn-secondary btn-sm" id="exportCsvBtn" title="Export CSV without private numbers">
+                <span>📥 Export CSV</span>
+              </button>
+              <button type="button" class="btn btn-danger-subtle btn-sm" id="clearLocalDataBtn" title="Safe 2-step reset">
+                <span>🗑️ Reset All</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Admin Participant Management Table -->
+          <div class="table-responsive admin-table-responsive">
+            <table class="participants-table admin-table" id="adminParticipantsTable">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 8%;">S.No</th>
+                  <th scope="col" style="width: 14%;">Reference</th>
+                  <th scope="col" style="width: 22%;">Participant Name</th>
+                  <th scope="col" style="width: 16%;">Mobile Number</th>
+                  <th scope="col" style="width: 14%;">Area / Village</th>
+                  <th scope="col" style="width: 12%;">Status</th>
+                  <th scope="col" style="width: 14%; text-align: center;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody">
+                <!-- Dynamically populated by script.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State when no matches -->
+          <div class="table-empty-state" id="adminTableEmptyState" style="display: none;">
+            <div class="empty-icon-sm">📝</div>
+            <p>No participant records found in the database. Use the registration form above to add registrations.</p>
+          </div>
+
+          <!-- Architectural Safety Note -->
           <div class="admin-architecture-notice">
             <div class="notice-header">
               <span class="notice-icon">ℹ️</span>
-              <h4>GitHub Pages Static Hosting Notice & Secure Backend Architecture</h4>
+              <h4>GitHub Pages Static Hosting & Production Backend Plan</h4>
             </div>
             <p>
-              This website is hosted statically on <strong>GitHub Pages</strong>. Static frontends do not provide server-side databases or secure admin authentication. For an actual production multi-user system, client-side passwords must not be used. Instead, a dedicated backend (such as Firebase Authentication + Firestore, Supabase, or a Node.js/PostgreSQL service) should be connected with:
+              This website runs directly on <strong>GitHub Pages</strong> with responsive client-side persistence in <code>localStorage</code>. For an enterprise multi-user production deployment, connect this frontend to a secured backend (Firebase Firestore, Supabase, or Node.js) with authenticated admin roles, row-level security (RLS), and automated audit logs.
             </p>
-            <ul class="admin-feature-tags">
-              <li>🔒 Role-Based Server Authentication (Admin / Staff)</li>
-              <li>🛡️ Encrypted Phone Number Storage with Audit Logs</li>
-              <li>📑 Server-Generated Sequential Serial Allocation</li>
-              <li>📤 Secure CSV / Excel Export with Permission Checks</li>
-            </ul>
-          </div>
-
-          <!-- Interactive Prototype Admin Dashboard Controls -->
-          <div class="admin-mock-dashboard">
-            <div class="admin-dash-header">
-              <h3>Admin View (Local Prototype Mode)</h3>
-              <div class="admin-actions">
-                <button type="button" class="btn btn-secondary btn-sm" id="exportCsvBtn">
-                  <span>📥 Export Permitted Records (CSV)</span>
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" id="clearLocalDataBtn">
-                  <span>🗑️ Clear All Registrations</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="admin-stats-row">
-              <div class="admin-stat-card">
-                <span class="stat-title">Total Registered</span>
-                <span class="stat-value" id="adminTotalCount">0</span>
-              </div>
-              <div class="admin-stat-card">
-                <span class="stat-title">Available Slots</span>
-                <span class="stat-value" id="adminSlotsLeft">99</span>
-              </div>
-              <div class="admin-stat-card">
-                <span class="stat-title">Venue</span>
-                <span class="stat-value text-gold">Bandarulanka</span>
-              </div>
-              <div class="admin-stat-card">
-                <span class="stat-title">Prize Consecration</span>
-                <span class="stat-value text-saffron">5 KG Laddu</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </section>
+
+    <!-- EDIT PARTICIPANT MODAL -->
+    <div class="modal-backdrop" id="editModalBackdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+      <div class="modal-dialog glass-card">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-icon">✏️</span>
+            <h3 id="editModalTitle">Edit Participant Registration</h3>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeEditModalBtn" aria-label="Close edit modal">✕</button>
+        </div>
+
+        <form id="editParticipantForm" novalidate>
+          <div class="modal-body">
+            <!-- Serial Number & Reference (Read-only) -->
+            <div class="modal-grid-2">
+              <div class="form-group">
+                <label class="form-label">Serial Number (Read-only)</label>
+                <input type="text" id="editSerialNo" class="form-control input-readonly" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Registration Ref (Read-only)</label>
+                <input type="text" id="editRefId" class="form-control input-readonly" readonly>
+              </div>
+            </div>
+
+            <!-- Participant Name Field -->
+            <div class="form-group" id="editNameGroup">
+              <label for="editFullName" class="form-label">
+                Participant Name (భక్తుని పేరు) <span class="required-star">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="editFullName" 
+                class="form-control" 
+                required 
+                minlength="2" 
+                maxlength="60"
+                pattern="^[a-zA-Z\s\.]+$"
+              >
+              <small class="error-msg" id="editNameError"></small>
+            </div>
+
+            <!-- Mobile Number Field -->
+            <div class="form-group" id="editPhoneGroup">
+              <label for="editPhoneNumber" class="form-label">
+                Mobile Number (మొబైల్ నంబర్) <span class="required-star">*</span>
+              </label>
+              <div class="input-wrap phone-input-wrap">
+                <span class="country-prefix">+91</span>
+                <input 
+                  type="tel" 
+                  id="editPhoneNumber" 
+                  class="form-control phone-control" 
+                  maxlength="10"
+                  pattern="^[6-9]\d{9}$"
+                >
+              </div>
+              <small class="error-msg" id="editPhoneError"></small>
+            </div>
+
+            <!-- Area Location -->
+            <div class="form-group">
+              <label for="editAreaLocation" class="form-label">Area / Location</label>
+              <input type="text" id="editAreaLocation" class="form-control" maxlength="60">
+            </div>
+
+            <!-- Ticket Status & Reg Date -->
+            <div class="modal-grid-2">
+              <div class="form-group">
+                <label for="editStatusSelect" class="form-label">Ticket Status</label>
+                <select id="editStatusSelect" class="form-control select-control">
+                  <option value="Registration Received">Registration Received (Active)</option>
+                  <option value="Confirmed / Verified">Confirmed / Verified (Active)</option>
+                  <option value="Cancelled">Cancelled (Soft-Delete)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Registration Date</label>
+                <input type="text" id="editRegDate" class="form-control input-readonly" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="saveEditBtn">
+              <span>Save Changes</span> <span>💾</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- DELETE / CANCEL CONFIRMATION MODAL -->
+    <div class="modal-backdrop" id="deleteModalBackdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+      <div class="modal-dialog glass-card modal-dialog-sm">
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <span class="modal-icon text-danger">⚠️</span>
+            <h3 id="deleteModalTitle">Manage / Delete Registration</h3>
+          </div>
+          <button type="button" class="modal-close-btn" id="closeDeleteModalBtn" aria-label="Close modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <p class="delete-warning-text">
+            Choose an action for participant <strong id="deleteParticipantName" class="text-gold"></strong> (<span id="deleteParticipantSerial" class="text-saffron"></span> • <span id="deleteParticipantRef"></span>):
+          </p>
+
+          <div class="delete-options-box">
+            <div class="delete-option-card">
+              <h4>1. Cancel Registration (Recommended)</h4>
+              <p>Marks this ticket as <strong>Cancelled</strong>. Preserves serial number history for audit integrity without allocating duplicate numbers.</p>
+            </div>
+            <div class="delete-option-card danger-card">
+              <h4>2. Permanent Delete</h4>
+              <p>Completely removes the record from the database. (Cannot be undone).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer modal-footer-stacked">
+          <button type="button" class="btn btn-warning-action btn-block" id="confirmSoftCancelBtn">
+            <span>Mark as Cancelled (Soft-Delete)</span> <span>🚫</span>
+          </button>
+          <button type="button" class="btn btn-danger btn-block" id="confirmHardDeleteBtn">
+            <span>Permanently Delete Record</span> <span>🗑️</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-block" id="cancelDeleteActionBtn">
+            <span>Keep Record (Go Back)</span>
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- WINNER ANNOUNCEMENT PLACEHOLDER -->
     <section class="section winner-section" id="winner">

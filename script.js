@@ -1,12 +1,13 @@
 /**
  * Mattaparthi Vari Pallem - Vinayaka Chavithi 5 KG Laddu Event (Bandarulanka)
  * Technology: Pure Vanilla JavaScript • GitHub Pages Compatible
- * Features: Sequential Serial Allocation, Client-side Prototype Storage,
- * Privacy-Shielded Public Participant Directory, WhatsApp Sharing & CSV Export.
+ * Features: Sequential Serial Allocation, Full Admin Participant Management
+ * (Edit Name/Mobile/Status, Soft-Cancel & Hard-Delete, Search/Filter, CSV Export & Backup).
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // --- DOM Element References ---
+  // Public Registration Form
   const regForm = document.getElementById('registrationForm');
   const nameInput = document.getElementById('fullName');
   const phoneInput = document.getElementById('phoneNumber');
@@ -23,25 +24,59 @@ document.addEventListener('DOMContentLoaded', () => {
   const displayRegDate = document.getElementById('displayRegDate');
   const displayBarcodeText = document.getElementById('displayBarcodeText');
 
-  // Buttons
+  // Ticket Action Buttons
   const copyRefBtn = document.getElementById('copyRefBtn');
   const whatsappShareBtn = document.getElementById('whatsappShareBtn');
   const printTicketBtn = document.getElementById('printTicketBtn');
   const registerAnotherBtn = document.getElementById('registerAnotherBtn');
 
-  // Participant Directory & Search
+  // Public Participant Directory & Search
   const participantSearchInput = document.getElementById('participantSearchInput');
   const participantsTableBody = document.getElementById('participantsTableBody');
   const participantCount = document.getElementById('participantCount');
   const tableEmptyState = document.getElementById('tableEmptyState');
 
-  // Admin Dashboard Preview Elements
+  // Admin Dashboard Elements & Stats
   const adminTotalCount = document.getElementById('adminTotalCount');
+  const adminActiveCount = document.getElementById('adminActiveCount');
+  const adminNextSerial = document.getElementById('adminNextSerial');
   const adminSlotsLeft = document.getElementById('adminSlotsLeft');
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   const clearLocalDataBtn = document.getElementById('clearLocalDataBtn');
 
-  // Navigation & Particles
+  // Admin Search, Filters & Management Table
+  const adminSearchInput = document.getElementById('adminSearchInput');
+  const adminStatusFilter = document.getElementById('adminStatusFilter');
+  const adminSortFilter = document.getElementById('adminSortFilter');
+  const adminTableBody = document.getElementById('adminTableBody');
+  const adminTableEmptyState = document.getElementById('adminTableEmptyState');
+
+  // Edit Modal Elements
+  const editModalBackdrop = document.getElementById('editModalBackdrop');
+  const editParticipantForm = document.getElementById('editParticipantForm');
+  const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+  const cancelEditBtn = document.getElementById('cancelEditBtn');
+  const editSerialNo = document.getElementById('editSerialNo');
+  const editRefId = document.getElementById('editRefId');
+  const editFullName = document.getElementById('editFullName');
+  const editPhoneNumber = document.getElementById('editPhoneNumber');
+  const editAreaLocation = document.getElementById('editAreaLocation');
+  const editStatusSelect = document.getElementById('editStatusSelect');
+  const editRegDate = document.getElementById('editRegDate');
+  const editNameError = document.getElementById('editNameError');
+  const editPhoneError = document.getElementById('editPhoneError');
+
+  // Delete / Cancel Modal Elements
+  const deleteModalBackdrop = document.getElementById('deleteModalBackdrop');
+  const closeDeleteModalBtn = document.getElementById('closeDeleteModalBtn');
+  const cancelDeleteActionBtn = document.getElementById('cancelDeleteActionBtn');
+  const confirmSoftCancelBtn = document.getElementById('confirmSoftCancelBtn');
+  const confirmHardDeleteBtn = document.getElementById('confirmHardDeleteBtn');
+  const deleteParticipantName = document.getElementById('deleteParticipantName');
+  const deleteParticipantSerial = document.getElementById('deleteParticipantSerial');
+  const deleteParticipantRef = document.getElementById('deleteParticipantRef');
+
+  // Navigation & Floating Particles
   const mobileNavToggle = document.getElementById('mobileNavToggle');
   const primaryNav = document.getElementById('primaryNav');
   const navLinks = document.querySelectorAll('.nav-link');
@@ -51,11 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // State
   let activeTicketData = null;
+  let currentlySelectedParticipant = null;
   let particlesActive = true;
   let animationFrameId = null;
-
-  // Initial State: Start with a clean empty list (0 registrations)
-  const initialSampleData = [];
 
   /* ==========================================================================
      1. Toast Notification Utility
@@ -79,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     2. Data Storage & Sequential Serial Management
+     2. Data Storage & Sequential Serial Allocation
      ========================================================================== */
   function getStoredParticipants() {
     try {
@@ -105,7 +138,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getNextSerialInfo(currentList) {
-    const nextNumber = currentList.length + 1;
+    let maxSerial = 0;
+    currentList.forEach((p) => {
+      const num = parseInt(p.serialNo, 10);
+      if (!isNaN(num) && num > maxSerial) {
+        maxSerial = num;
+      }
+    });
+    const nextNumber = maxSerial + 1;
     const formattedSerial = String(nextNumber).padStart(3, '0');
     const formattedRef = `MMP-${formattedSerial}`;
     return { serialNo: formattedSerial, refId: formattedRef };
@@ -117,8 +157,39 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${String(d.getDate()).padStart(2, '0')}-${months[d.getMonth()]}-${d.getFullYear()}`;
   }
 
+  function maskPhone(phone) {
+    if (!phone) return 'N/A';
+    const clean = phone.replace(/\D/g, '');
+    if (clean.length === 10) {
+      return `+91 ${clean.slice(0, 5)}-XXXXX`;
+    }
+    return phone;
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
   /* ==========================================================================
-     3. Render Participant Directory Table
+     3. Synchronized Stats Dashboard Updater
+     ========================================================================== */
+  function updateDashboardStats() {
+    const list = getStoredParticipants();
+    const activeList = list.filter((p) => p.status !== 'Cancelled');
+    const nextInfo = getNextSerialInfo(list);
+
+    if (participantCount) participantCount.textContent = String(list.length);
+    if (adminTotalCount) adminTotalCount.textContent = String(list.length);
+    if (adminActiveCount) adminActiveCount.textContent = String(activeList.length);
+    if (adminNextSerial) adminNextSerial.textContent = nextInfo.serialNo;
+    if (adminSlotsLeft) adminSlotsLeft.textContent = String(Math.max(0, 99 - list.length));
+  }
+
+  /* ==========================================================================
+     4. Public Participant Directory Rendering
      ========================================================================== */
   function renderParticipantTable(filterTerm = '') {
     const list = getStoredParticipants();
@@ -149,30 +220,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if (tableEmptyState) tableEmptyState.style.display = 'none';
 
       filtered.forEach((item) => {
+        const isCancelled = item.status === 'Cancelled';
+        const statusClass = isCancelled ? 'status-badge-cancelled' : 'status-badge-rcv';
+        const statusLabel = isCancelled ? 'Cancelled' : 'Received';
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td class="serial-cell"><strong>${item.serialNo}</strong></td>
           <td><strong>${escapeHtml(item.name)}</strong></td>
           <td><span class="ref-tag">${item.refId}</span></td>
-          <td><span class="status-badge-rcv">Received</span></td>
+          <td><span class="${statusClass}">${statusLabel}</span></td>
         `;
         participantsTableBody.appendChild(tr);
       });
     }
 
-    // Update Counts
-    if (participantCount) participantCount.textContent = String(list.length);
-    if (adminTotalCount) adminTotalCount.textContent = String(list.length);
-    if (adminSlotsLeft) adminSlotsLeft.textContent = String(Math.max(0, 99 - list.length));
+    updateDashboardStats();
   }
 
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  // Real-time directory search
   if (participantSearchInput) {
     participantSearchInput.addEventListener('input', (e) => {
       renderParticipantTable(e.target.value);
@@ -180,7 +245,331 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     4. Form Validation & Registration Handler
+     5. Admin Participant Management Table Rendering
+     ========================================================================== */
+  function renderAdminTable() {
+    if (!adminTableBody) return;
+
+    const list = getStoredParticipants();
+    adminTableBody.innerHTML = '';
+
+    const searchTerm = adminSearchInput ? adminSearchInput.value.trim().toLowerCase() : '';
+    const statusFilter = adminStatusFilter ? adminStatusFilter.value : 'ALL';
+    const sortOrder = adminSortFilter ? adminSortFilter.value : 'SERIAL_ASC';
+
+    // 1. Filter
+    let filtered = list.filter((p) => {
+      // Search match
+      const matchesSearch =
+        !searchTerm ||
+        p.name.toLowerCase().includes(searchTerm) ||
+        p.refId.toLowerCase().includes(searchTerm) ||
+        p.serialNo.includes(searchTerm) ||
+        (p.phone && p.phone.includes(searchTerm)) ||
+        (p.location && p.location.toLowerCase().includes(searchTerm));
+
+      // Status match
+      let matchesStatus = true;
+      if (statusFilter === 'Active') {
+        matchesStatus = p.status !== 'Cancelled';
+      } else if (statusFilter === 'Cancelled') {
+        matchesStatus = p.status === 'Cancelled';
+      }
+
+      return matchesSearch && matchesStatus;
+    });
+
+    // 2. Sort
+    filtered.sort((a, b) => {
+      if (sortOrder === 'SERIAL_ASC') {
+        return parseInt(a.serialNo, 10) - parseInt(b.serialNo, 10);
+      } else if (sortOrder === 'SERIAL_DESC') {
+        return parseInt(b.serialNo, 10) - parseInt(a.serialNo, 10);
+      } else if (sortOrder === 'NAME_ASC') {
+        return a.name.localeCompare(b.name);
+      }
+      return 0;
+    });
+
+    if (filtered.length === 0) {
+      if (adminTableEmptyState) {
+        adminTableEmptyState.style.display = 'block';
+        if (searchTerm || statusFilter !== 'ALL') {
+          adminTableEmptyState.innerHTML = '<div class="empty-icon-sm">🔍</div><p>No participant records match the current filter criteria.</p>';
+        } else {
+          adminTableEmptyState.innerHTML = '<div class="empty-icon-sm">📝</div><p>No participant records found in the database. Registrations will appear here in real-time.</p>';
+        }
+      }
+    } else {
+      if (adminTableEmptyState) adminTableEmptyState.style.display = 'none';
+
+      filtered.forEach((item) => {
+        const isCancelled = item.status === 'Cancelled';
+        const statusClass = isCancelled ? 'status-badge-cancelled' : 'status-badge-rcv';
+        const displayStatus = isCancelled ? 'Cancelled' : (item.status || 'Received');
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="serial-cell"><strong>${item.serialNo}</strong></td>
+          <td><span class="ref-tag">${item.refId}</span></td>
+          <td><strong>${escapeHtml(item.name)}</strong></td>
+          <td><span title="Private Admin View">${maskPhone(item.phone)}</span></td>
+          <td>${escapeHtml(item.location || 'Bandarulanka')}</td>
+          <td><span class="${statusClass}">${displayStatus}</span></td>
+          <td class="admin-actions-cell">
+            <button type="button" class="btn-action-edit" data-serial="${item.serialNo}" title="Edit participant name & details">
+              ✏️ Edit
+            </button>
+            <button type="button" class="btn-action-delete" data-serial="${item.serialNo}" title="Cancel or delete registration">
+              🗑️ Delete
+            </button>
+          </td>
+        `;
+        adminTableBody.appendChild(tr);
+      });
+
+      // Attach row action listeners
+      adminTableBody.querySelectorAll('.btn-action-edit').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const serial = btn.getAttribute('data-serial');
+          openEditModal(serial);
+        });
+      });
+
+      adminTableBody.querySelectorAll('.btn-action-delete').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const serial = btn.getAttribute('data-serial');
+          openDeleteModal(serial);
+        });
+      });
+    }
+
+    updateDashboardStats();
+  }
+
+  // Admin filter event listeners
+  if (adminSearchInput) adminSearchInput.addEventListener('input', renderAdminTable);
+  if (adminStatusFilter) adminStatusFilter.addEventListener('change', renderAdminTable);
+  if (adminSortFilter) adminSortFilter.addEventListener('change', renderAdminTable);
+
+  /* ==========================================================================
+     6. Edit Participant Workflow & Modal
+     ========================================================================== */
+  function openEditModal(serialNo) {
+    const list = getStoredParticipants();
+    const target = list.find((p) => p.serialNo === serialNo);
+
+    if (!target) {
+      showToast('Participant record not found.', '⚠️', 2500);
+      return;
+    }
+
+    currentlySelectedParticipant = target;
+
+    // Populate Modal Form Fields
+    editSerialNo.value = target.serialNo;
+    editRefId.value = target.refId;
+    editFullName.value = target.name || '';
+    editPhoneNumber.value = target.phone ? target.phone.replace(/\D/g, '') : '';
+    editAreaLocation.value = target.location || 'Bandarulanka';
+    editStatusSelect.value = target.status || 'Registration Received';
+    editRegDate.value = target.date || formatCurrentDate();
+
+    // Clear previous errors
+    if (editNameError) editNameError.textContent = '';
+    if (editPhoneError) editPhoneError.textContent = '';
+    document.getElementById('editNameGroup').classList.remove('has-error');
+    document.getElementById('editPhoneGroup').classList.remove('has-error');
+
+    // Show Modal
+    if (editModalBackdrop) {
+      editModalBackdrop.style.display = 'flex';
+      editFullName.focus();
+    }
+  }
+
+  function closeEditModal() {
+    if (editModalBackdrop) {
+      editModalBackdrop.style.display = 'none';
+      currentlySelectedParticipant = null;
+    }
+  }
+
+  if (closeEditModalBtn) closeEditModalBtn.addEventListener('click', closeEditModal);
+  if (cancelEditBtn) cancelEditBtn.addEventListener('click', closeEditModal);
+
+  // Close on backdrop click
+  if (editModalBackdrop) {
+    editModalBackdrop.addEventListener('click', (e) => {
+      if (e.target === editModalBackdrop) closeEditModal();
+    });
+  }
+
+  if (editParticipantForm) {
+    editParticipantForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!currentlySelectedParticipant) return;
+
+      const newName = editFullName.value.trim();
+      const newPhone = editPhoneNumber.value.trim().replace(/\D/g, '');
+      const newArea = editAreaLocation.value.trim() || 'Bandarulanka';
+      const newStatus = editStatusSelect.value;
+
+      // Validation
+      let isValid = true;
+      if (!newName || newName.length < 2 || !/^[a-zA-Z\s\.]+$/.test(newName)) {
+        document.getElementById('editNameGroup').classList.add('has-error');
+        if (editNameError) editNameError.textContent = 'Enter a valid participant name (min 2 characters, letters only).';
+        isValid = false;
+      } else {
+        document.getElementById('editNameGroup').classList.remove('has-error');
+        if (editNameError) editNameError.textContent = '';
+      }
+
+      if (newPhone && !/^[6-9]\d{9}$/.test(newPhone)) {
+        document.getElementById('editPhoneGroup').classList.add('has-error');
+        if (editPhoneError) editPhoneError.textContent = 'Enter a valid 10-digit Indian mobile number.';
+        isValid = false;
+      } else {
+        document.getElementById('editPhoneGroup').classList.remove('has-error');
+        if (editPhoneError) editPhoneError.textContent = '';
+      }
+
+      if (!isValid) return;
+
+      // Update in stored array
+      const list = getStoredParticipants();
+      const idx = list.findIndex((p) => p.serialNo === currentlySelectedParticipant.serialNo);
+
+      if (idx !== -1) {
+        list[idx].name = newName;
+        if (newPhone) list[idx].phone = newPhone;
+        list[idx].location = newArea;
+        list[idx].status = newStatus;
+
+        saveParticipants(list);
+
+        // Synchronize active pass if currently displayed
+        try {
+          const activeSaved = localStorage.getItem('mmp_active_ticket');
+          if (activeSaved) {
+            const parsed = JSON.parse(activeSaved);
+            if (parsed && parsed.serialNo === list[idx].serialNo) {
+              parsed.name = newName;
+              parsed.location = newArea;
+              parsed.status = newStatus;
+              renderTicketPass(parsed);
+            }
+          }
+        } catch (err) {}
+
+        closeEditModal();
+        renderAdminTable();
+        renderParticipantTable();
+
+        showToast(`✅ Participant "${newName}" (Serial ${list[idx].serialNo}) updated successfully!`, '✓', 3500);
+      }
+    });
+  }
+
+  /* ==========================================================================
+     7. Delete / Cancel Workflow & Modal
+     ========================================================================== */
+  function openDeleteModal(serialNo) {
+    const list = getStoredParticipants();
+    const target = list.find((p) => p.serialNo === serialNo);
+
+    if (!target) {
+      showToast('Participant record not found.', '⚠️', 2500);
+      return;
+    }
+
+    currentlySelectedParticipant = target;
+
+    deleteParticipantName.textContent = target.name;
+    deleteParticipantSerial.textContent = `Serial: ${target.serialNo}`;
+    deleteParticipantRef.textContent = target.refId;
+
+    if (deleteModalBackdrop) {
+      deleteModalBackdrop.style.display = 'flex';
+    }
+  }
+
+  function closeDeleteModal() {
+    if (deleteModalBackdrop) {
+      deleteModalBackdrop.style.display = 'none';
+      currentlySelectedParticipant = null;
+    }
+  }
+
+  if (closeDeleteModalBtn) closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+  if (cancelDeleteActionBtn) cancelDeleteActionBtn.addEventListener('click', closeDeleteModal);
+
+  if (deleteModalBackdrop) {
+    deleteModalBackdrop.addEventListener('click', (e) => {
+      if (e.target === deleteModalBackdrop) closeDeleteModal();
+    });
+  }
+
+  // Action 1: Soft-Cancel (Recommended)
+  if (confirmSoftCancelBtn) {
+    confirmSoftCancelBtn.addEventListener('click', () => {
+      if (!currentlySelectedParticipant) return;
+
+      const list = getStoredParticipants();
+      const idx = list.findIndex((p) => p.serialNo === currentlySelectedParticipant.serialNo);
+
+      if (idx !== -1) {
+        list[idx].status = 'Cancelled';
+        saveParticipants(list);
+
+        const targetName = list[idx].name;
+        const targetSerial = list[idx].serialNo;
+
+        closeDeleteModal();
+        renderAdminTable();
+        renderParticipantTable();
+
+        showToast(`🚫 Registration for "${targetName}" (Serial ${targetSerial}) marked as Cancelled.`, 'ℹ️', 4000);
+      }
+    });
+  }
+
+  // Action 2: Hard Delete (Permanent)
+  if (confirmHardDeleteBtn) {
+    confirmHardDeleteBtn.addEventListener('click', () => {
+      if (!currentlySelectedParticipant) return;
+
+      const targetName = currentlySelectedParticipant.name;
+      const targetSerial = currentlySelectedParticipant.serialNo;
+
+      let list = getStoredParticipants();
+      list = list.filter((p) => p.serialNo !== targetSerial);
+      saveParticipants(list);
+
+      // If active ticket matches, remove it
+      try {
+        const activeSaved = localStorage.getItem('mmp_active_ticket');
+        if (activeSaved) {
+          const parsed = JSON.parse(activeSaved);
+          if (parsed && parsed.serialNo === targetSerial) {
+            localStorage.removeItem('mmp_active_ticket');
+            if (ticketEmptyState) ticketEmptyState.style.display = 'block';
+            if (digitalTicketCard) digitalTicketCard.style.display = 'none';
+          }
+        }
+      } catch (err) {}
+
+      closeDeleteModal();
+      renderAdminTable();
+      renderParticipantTable();
+
+      showToast(`🗑️ Participant "${targetName}" (Serial ${targetSerial}) permanently removed.`, '✓', 4000);
+    });
+  }
+
+  /* ==========================================================================
+     8. Public Form Validation & Sequential Registration
      ========================================================================== */
   function validateName() {
     const group = document.getElementById('nameGroup');
@@ -248,7 +637,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (errorEl) errorEl.textContent = '';
   }
 
-  // Real-time phone sanitization
   if (phoneInput) {
     phoneInput.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
@@ -297,27 +685,24 @@ document.addEventListener('DOMContentLoaded', () => {
         serialNo: nextInfo.serialNo,
         refId: nextInfo.refId,
         name: nameInput.value.trim(),
-        location: 'Bandarulanka',
+        phone: phoneInput.value.trim(),
+        location: areaInput ? (areaInput.value.trim() || 'Bandarulanka') : 'Bandarulanka',
         status: 'Registration Received',
         date: formatCurrentDate()
       };
 
-      // Add to array & save
       currentList.push(newEntry);
       saveParticipants(currentList);
 
-      // Render Confirmation Pass
       renderTicketPass(newEntry);
-
-      // Refresh directory table
       renderParticipantTable();
+      renderAdminTable();
 
       submitRegBtn.disabled = false;
       submitRegBtn.innerHTML = '<span class="btn-text">Registered Successfully ✓</span> <span class="btn-icon">🎟️</span>';
 
-      showToast(`🎉 Registration Confirmed! Serial: ${newEntry.serialNo} • Ref: ${newEntry.refId}`, '🪔', 4500);
+      showToast(`🎉 Confirmed! Serial: ${newEntry.serialNo} • Ref: ${newEntry.refId}`, '🪔', 4500);
 
-      // Scroll to ticket on mobile view
       if (window.innerWidth < 992 && digitalTicketCard) {
         digitalTicketCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -329,7 +714,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     5. Render Digital Ticket Pass Card
+     9. Digital Ticket Pass Card Display
      ========================================================================== */
   function renderTicketPass(data) {
     if (!digitalTicketCard || !ticketEmptyState) return;
@@ -347,9 +732,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       localStorage.setItem('mmp_active_ticket', JSON.stringify(data));
-    } catch (e) {
-      // Ignore
-    }
+    } catch (e) {}
   }
 
   function loadActiveTicket() {
@@ -361,15 +744,12 @@ document.addEventListener('DOMContentLoaded', () => {
           renderTicketPass(parsed);
         }
       }
-    } catch (e) {
-      // Ignore
-    }
+    } catch (e) {}
   }
 
   /* ==========================================================================
-     6. Ticket Actions (Copy, WhatsApp Share, Print, Reset)
+     10. Ticket Action Buttons (Copy, WhatsApp, Print, Reset)
      ========================================================================== */
-  // 6.1 Copy Reference
   if (copyRefBtn) {
     copyRefBtn.addEventListener('click', () => {
       if (!activeTicketData) return;
@@ -399,7 +779,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.removeChild(input);
   }
 
-  // 6.2 WhatsApp Share (Exact Required Format)
   if (whatsappShareBtn) {
     whatsappShareBtn.addEventListener('click', () => {
       if (!activeTicketData) return;
@@ -419,14 +798,12 @@ This is a registration confirmation for the event. It is not proof of payment or
     });
   }
 
-  // 6.3 Print Action
   if (printTicketBtn) {
     printTicketBtn.addEventListener('click', () => {
       window.print();
     });
   }
 
-  // 6.4 Register Another Participant
   if (registerAnotherBtn) {
     registerAnotherBtn.addEventListener('click', () => {
       if (regForm) {
@@ -446,9 +823,7 @@ This is a registration confirmation for the event. It is not proof of payment or
 
       try {
         localStorage.removeItem('mmp_active_ticket');
-      } catch (e) {
-        // Ignore
-      }
+      } catch (e) {}
 
       showToast('Form cleared for new registration', '↺', 2500);
       nameInput.focus();
@@ -456,7 +831,7 @@ This is a registration confirmation for the event. It is not proof of payment or
   }
 
   /* ==========================================================================
-     7. Admin Preview Actions (CSV Export & Data Reset)
+     11. Admin Export & 2-Step Safe Database Reset
      ========================================================================== */
   if (exportCsvBtn) {
     exportCsvBtn.addEventListener('click', () => {
@@ -466,13 +841,12 @@ This is a registration confirmation for the event. It is not proof of payment or
         return;
       }
 
-      // Prepare CSV (strictly without phone numbers to preserve privacy)
       let csvContent = 'data:text/csv;charset=utf-8,';
-      csvContent += 'Serial No,Participant Name,Registration Reference,Location,Status,Date\n';
+      csvContent += 'Serial No,Registration Reference,Participant Name,Location,Status,Date\n';
 
       list.forEach((row) => {
         const nameClean = `"${row.name.replace(/"/g, '""')}"`;
-        csvContent += `${row.serialNo},${nameClean},${row.refId},${row.location},${row.status},${row.date}\n`;
+        csvContent += `${row.serialNo},${row.refId},${nameClean},${row.location || 'Bandarulanka'},${row.status},${row.date}\n`;
       });
 
       const encodedUri = encodeURI(csvContent);
@@ -496,7 +870,6 @@ This is a registration confirmation for the event. It is not proof of payment or
         return;
       }
 
-      // Step 1: Initial Warning Dialog
       const firstConfirm = confirm(
         `⚠️ ADMIN RESET CONFIRMATION (Step 1 of 2)\n\n` +
         `You are about to reset the participant directory.\n` +
@@ -507,7 +880,6 @@ This is a registration confirmation for the event. It is not proof of payment or
 
       if (!firstConfirm) return;
 
-      // Step 2: Explicit Verification Prompt
       const verificationInput = prompt(
         `🔒 FINAL VERIFICATION (Step 2 of 2)\n\n` +
         `To prevent accidental data loss, please type "RESET" (without quotes) below to confirm:`
@@ -518,13 +890,12 @@ This is a registration confirmation for the event. It is not proof of payment or
         return;
       }
 
-      // Automatic safety backup before clearing
       try {
         let csvContent = 'data:text/csv;charset=utf-8,';
-        csvContent += 'Serial No,Participant Name,Registration Reference,Location,Status,Date\n';
+        csvContent += 'Serial No,Registration Reference,Participant Name,Location,Status,Date\n';
         currentList.forEach((row) => {
           const nameClean = `"${row.name.replace(/"/g, '""')}"`;
-          csvContent += `${row.serialNo},${nameClean},${row.refId},${row.location},${row.status},${row.date}\n`;
+          csvContent += `${row.serialNo},${row.refId},${nameClean},${row.location},${row.status},${row.date}\n`;
         });
         const encodedUri = encodeURI(csvContent);
         const backupLink = document.createElement('a');
@@ -537,7 +908,6 @@ This is a registration confirmation for the event. It is not proof of payment or
         console.warn('Backup export note', backupErr);
       }
 
-      // Perform clean reset
       saveParticipants([]);
       try {
         localStorage.removeItem('mmp_active_ticket');
@@ -556,13 +926,14 @@ This is a registration confirmation for the event. It is not proof of payment or
       }
 
       renderParticipantTable();
-      showToast('✅ All records backed up and count safely reset to 0.', '🗑️', 4000);
+      renderAdminTable();
+      showToast('✅ All records backed up and database safely reset to 0.', '🗑️', 4000);
     });
   }
 
   /* ==========================================================================
-     8. Particle Canvas Engine & Reduced Motion
-     ========================================================================== */
+     12. Floating Particle Canvas & Accessibility
+     ========================================================================= */
   function initParticleCanvas() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -660,7 +1031,7 @@ This is a registration confirmation for the event. It is not proof of payment or
   }
 
   /* ==========================================================================
-     9. Mobile Navigation Toggle
+     13. Mobile Navigation Drawer
      ========================================================================== */
   if (mobileNavToggle && primaryNav) {
     mobileNavToggle.addEventListener('click', () => {
@@ -682,5 +1053,6 @@ This is a registration confirmation for the event. It is not proof of payment or
   // --- Initial Launch Calls ---
   initParticleCanvas();
   renderParticipantTable();
+  renderAdminTable();
   loadActiveTicket();
 });
