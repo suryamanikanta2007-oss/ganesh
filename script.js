@@ -54,12 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let particlesActive = true;
   let animationFrameId = null;
 
-  // Initial Sample Data for Prototype Evaluation
-  const initialSampleData = [
-    { serialNo: '001', refId: 'MMP-001', name: 'Manikanta', location: 'Bandarulanka', status: 'Registration Received', date: '22-Sep-2026' },
-    { serialNo: '002', refId: 'MMP-002', name: 'Ravi Kumar', location: 'Bandarulanka', status: 'Registration Received', date: '22-Sep-2026' },
-    { serialNo: '003', refId: 'MMP-003', name: 'Suresh Varma', location: 'Bandarulanka', status: 'Registration Received', date: '22-Sep-2026' }
-  ];
+  // Initial State: Start with a clean empty list (0 registrations)
+  const initialSampleData = [];
 
   /* ==========================================================================
      1. Toast Notification Utility
@@ -90,16 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const stored = localStorage.getItem('mmp_participants_list');
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
     } catch (e) {
-      console.warn('LocalStorage unavailable, using initial data');
+      console.warn('LocalStorage unavailable');
     }
-    // Fallback to sample data
-    saveParticipants(initialSampleData);
-    return [...initialSampleData];
+    return [];
   }
 
   function saveParticipants(dataList) {
@@ -143,7 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (filtered.length === 0) {
-      if (tableEmptyState) tableEmptyState.style.display = 'block';
+      if (tableEmptyState) {
+        tableEmptyState.style.display = 'block';
+        if (cleanFilter) {
+          tableEmptyState.innerHTML = '<div class="empty-icon-sm">🔍</div><p>No matching participants found for your search.</p>';
+        } else {
+          tableEmptyState.innerHTML = '<div class="empty-icon-sm">📝</div><p>No registrations yet. Be the first to register using the form above!</p>';
+        }
+      }
     } else {
       if (tableEmptyState) tableEmptyState.style.display = 'none';
 
@@ -488,10 +489,15 @@ This is a registration confirmation for the event. It is not proof of payment or
 
   if (clearLocalDataBtn) {
     clearLocalDataBtn.addEventListener('click', () => {
-      if (confirm('Reset participant records to default sample data?')) {
-        saveParticipants(initialSampleData);
+      if (confirm('Clear all local registration records?')) {
+        saveParticipants([]);
+        try {
+          localStorage.removeItem('mmp_active_ticket');
+        } catch (e) {}
+        if (ticketEmptyState) ticketEmptyState.style.display = 'block';
+        if (digitalTicketCard) digitalTicketCard.style.display = 'none';
         renderParticipantTable();
-        showToast('Sample data restored.', '↺', 2500);
+        showToast('All registration records cleared.', '🗑️', 2500);
       }
     });
   }
