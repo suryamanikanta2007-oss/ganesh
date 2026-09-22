@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mattaparthi Vari Pallem - Vinayaka Chavithi 5 KG Laddu Event | Bandarulanka</title>
+  <meta name="description" content="Official website for Mattaparthi Vari Pallem Vinayaka Chavithi 5 KG Laddu Event in Bandarulanka. View event details, rules, register for free demo pass, and view serial-wise participant list.">
+  <meta name="keywords" content="Mattaparthi Vari Pallem, Bandarulanka, Vinayaka Chavithi, 5 KG Laddu Event, Ganesh Chaturthi, Lucky Draw, Laddu Prasadam">
+  <meta name="author" content="Mattaparthi Vari Pallem Committee">
+  
+  <!-- Open Graph Meta Tags for Social & WhatsApp Sharing Previews -->
+  <meta property="og:title" content="Mattaparthi Vari Pallem - 5 KG Laddu Event | Bandarulanka">
+  <meta property="og:description" content="Vinayaka Chavithi Sacred 5 KG Maha Laddu Event at Mattaparthi Vari Pallem, Bandarulanka. Limited participation under 100 entries.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts for Divine Indian Festival Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Canvas for Floating Gold Sparkles & Diya Embers -->
+  <canvas id="festiveCanvas" aria-hidden="true"></canvas>
+
+  <!-- Top Announcement Bar -->
+  <aside class="top-announcement-bar" role="banner">
+    <div class="container announcement-content">
+      <div class="announcement-left">
+        <span class="festive-badge">🚩 బండారులంక</span>
+        <p class="announcement-text">
+          <strong>మట్టపర్తి వారి పల్లెం:</strong> శ్రీ వినాయక చవితి 5 కేజీల మహా లడ్డు కార్యక్రమం • ఉచిత నమోదు ప్రారంభం!
+        </p>
+      </div>
+      <div class="accessibility-controls">
+        <button id="toggleMotionBtn" class="pill-btn-mini" aria-label="Toggle festive particle animations" title="Toggle background sparkles">
+          <span class="motion-icon">✨</span> <span class="motion-text">Sparks ON</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Site Header & Navigation -->
+  <header class="site-header" id="siteHeader">
+    <div class="container nav-container">
+      <a href="#hero" class="brand-logo" aria-label="Mattaparthi Vari Pallem Homepage">
+        <div class="logo-icon-wrap">
+          <svg class="om-ganesha-svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="20" cy="20" r="18" fill="url(#goldGrad)" stroke="#ffd700" stroke-width="1.5"/>
+            <!-- Stylized Sacred Ganesha Emblem -->
+            <path d="M20 7V19M16 11C16 15 20 18 20 18C20 18 24 15 24 11" stroke="#3b0608" stroke-width="2" stroke-linecap="round"/>
+            <path d="M14 22C14 26 17 29 20 29C23 29 26 26 26 22C26 19 23 18 20 18" stroke="#3b0608" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="20" cy="33" r="2.2" fill="#e65100"/>
+            <defs>
+              <linearGradient id="goldGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFE082"/>
+                <stop offset="0.5" stop-color="#FFB300"/>
+                <stop offset="1" stop-color="#FFA000"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Mattaparthi Vari Pallem</span>
+          <span class="brand-subtitle">BANDARULANKA • 5 KG LADDU EVENT</span>
+        </div>
+      </a>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primaryNav">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+
+      <!-- Navigation Links -->
+      <nav class="primary-nav" id="primaryNav" aria-label="Main Navigation">
+        <ul class="nav-list">
+          <li><a href="#hero" class="nav-link">Home</a></li>
+          <li><a href="#prizeSection" class="nav-link">5 KG Laddu</a></li>
+          <li><a href="#eventDetails" class="nav-link">Event Details</a></li>
+          <li><a href="#register" class="nav-link nav-btn-highlight">Register</a></li>
+          <li><a href="#participants" class="nav-link">Participants</a></li>
+          <li><a href="#adminPreview" class="nav-link">Admin Preview</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="container hero-grid">
+        <!-- Hero Text Column -->
+        <div class="hero-content">
+          <div class="hero-tag-badge">
+            <span class="diya-emoji">🪔</span>
+            <span>Mattaparthi Vari Pallem • Bandarulanka</span>
+          </div>
+          
+          <h1 class="hero-main-title">
+            Vinayaka Chavithi <br>
+            <span class="text-gradient-gold">5 KG Laddu</span> Event
+          </h1>
+          
+          <p class="hero-telugu-highlight">
+            మట్టపర్తి వారి పల్లెం, బండారులంకలో శ్రీ వినాయక చవితి పర్వదిన మహోత్సవం సందర్భంగా పవిత్రమైన <strong>5 కేజీల మహా లడ్డు</strong> ప్రసాద కార్యక్రమం!
+          </p>
+
+          <p class="hero-description">
+            Welcome to the official community event portal for <strong>Mattaparthi Vari Pallem</strong>, Bandarulanka. Join us in celebrating Vinayaka Chavithi with devotion, unity, and transparent community participation.
+          </p>
+
+          <!-- Quick Highlight Badges -->
+          <div class="hero-highlights-row">
+            <div class="highlight-chip">
+              <span class="chip-icon">🍯</span>
+              <span class="chip-text"><strong>5 KG</strong> Pure Ghee Laddu</span>
+            </div>
+            <div class="highlight-chip">
+              <span class="chip-icon">📍</span>
+              <span class="chip-text"><strong>Bandarulanka</strong> Venue</span>
+            </div>
+            <div class="highlight-chip">
+              <span class="chip-icon">👥</span>
+              <span class="chip-text"><strong>&lt; 100</strong> Participants Limit</span>
+            </div>
+          </div>
+
+          <!-- Hero Action Buttons -->
+          <div class="hero-cta-group">
+            <a href="#register" class="btn btn-primary" id="heroRegisterBtn">
+              <span class="btn-text">Register for Event</span>
+              <span class="btn-icon">🎟️</span>
+            </a>
+            <a href="#eventDetails" class="btn btn-secondary" id="heroDetailsBtn">
+              <span class="btn-text">View Event Details</span>
+              <span class="btn-icon">📜</span>
+            </a>
+          </div>
+
+          <div class="hero-disclaimer-sub">
+            <small>✨ <em>Free Registration / Interactive Prototype • No Payments Required</em></small>
+          </div>
+        </div>
+
+        <!-- Hero 3D Festive Visual Card -->
+        <div class="hero-visual-col">
+          <div class="festive-art-card">
+            <div class="halo-glow" aria-hidden="true"></div>
+            
+            <!-- Traditional Marigold Garland -->
+            <div class="marigold-garland" aria-hidden="true">
+              <span>🌼</span><span>🏵️</span><span>🌼</span><span>🏵️</span><span>🌼</span><span>🏵️</span><span>🌼</span>
+            </div>
+
+            <!-- 3D Festive Centerpiece Visual -->
+            <div class="festive-centerpiece">
+              <!-- Divine Aura Rings -->
+              <div class="aura-rings" aria-hidden="true">
+                <div class="aura-ring ring-1"></div>
+                <div class="aura-ring ring-2"></div>
+              </div>
+
+              <!-- Ganesha Divine Iconography -->
+              <div class="ganesha-emblem">
+                <div class="divine-crown">👑</div>
+                <div class="ganesha-symbol">ॐ</div>
+                <div class="ganesha-tilak">卐</div>
+              </div>
+
+              <!-- The Grand 5KG Laddu on Golden Thali Display -->
+              <div class="grand-laddu-display">
+                <div class="laddu-sphere" id="heroLaddu3d" title="5 KG Maha Laddu - Mattaparthi Vari Pallem">
+                  <div class="laddu-texture"></div>
+                  <div class="laddu-vark"></div>
+                  <div class="laddu-pistachios">
+                    <span class="pista p1"></span>
+                    <span class="pista p2"></span>
+                    <span class="pista p3"></span>
+                    <span class="pista p4"></span>
+                    <span class="pista p5"></span>
+                  </div>
+                  <div class="laddu-badge-overlay">5 KG</div>
+                </div>
+                <!-- Golden Thali Pedestal -->
+                <div class="golden-thali">
+                  <div class="thali-rim"></div>
+                  <div class="thali-base"></div>
+                </div>
+              </div>
+
+              <!-- Twin Brass Diyas with Animated Flickering Flames -->
+              <div class="diyas-row" aria-hidden="true">
+                <div class="brass-diya left-diya">
+                  <div class="diya-flame"></div>
+                  <div class="diya-lamp">🪔</div>
+                </div>
+                <div class="center-blessing">
+                  <span>|| మట్టపర్తి వారి పల్లెం ||</span>
+                </div>
+                <div class="brass-diya right-diya">
+                  <div class="diya-flame"></div>
+                  <div class="diya-lamp">🪔</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Status Ribbon -->
+            <div class="card-footer-ribbon">
+              <span class="pulse-dot"></span>
+              <span>Event Location: Bandarulanka</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIZE SPOTLIGHT SECTION -->
+    <section class="section prize-section" id="prizeSection">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-sub-badge badge-gold">🏆 Grand Prashad Highlight</span>
+          <h2 class="section-title">The Sacred 5 KG Maha Laddu</h2>
+          <p class="section-description">
+            Specially consecrated for the devotees of Mattaparthi Vari Pallem, Bandarulanka.
+          </p>
+        </div>
+
+        <div class="prize-spotlight-card glass-card">
+          <div class="prize-card-grid">
+            <div class="prize-visual-wrap">
+              <div class="big-laddu-container">
+                <div class="spotlight-laddu">
+                  <div class="laddu-vark-big"></div>
+                  <span class="laddu-weight-tag">5 KG</span>
+                </div>
+                <div class="spotlight-plate"></div>
+              </div>
+            </div>
+
+            <div class="prize-details-content">
+              <span class="event-badge-tag">మట్టపర్తి వారి పల్లెం • బండారులంక</span>
+              <h3 class="prize-headline">Pure Cow Ghee 5 KG Maha Laddu</h3>
+              <p class="prize-desc">
+                Crafted following age-old traditional recipes using 100% pure cow ghee, premium cashews, pistachios, cardamom, raisins, and natural saffron strands. Sanctified during the festival Visarjan Maha Pooja ceremony.
+              </p>
+
+              <div class="prize-specs-grid">
+                <div class="spec-item">
+                  <span class="spec-icon">⚖️</span>
+                  <div class="spec-info">
+                    <strong>5 Kilograms Net Weight</strong>
+                    <span>Grand Prashadam</span>
+                  </div>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-icon">🧈</span>
+                  <div class="spec-info">
+                    <strong>100% Pure Cow Ghee</strong>
+                    <span>Authentic ingredients</span>
+                  </div>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-icon">🎁</span>
+                  <div class="spec-info">
+                    <strong>Ceremonial Box</strong>
+                    <span>Decorated velvet casket</span>
+                  </div>
+                </div>
+                <div class="spec-item">
+                  <span class="spec-icon">🛕</span>
+                  <div class="spec-info">
+                    <strong>Sanctified at Pandal</strong>
+                    <span>Vedic Mantra Chanting</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="prize-cta-row">
+                <a href="#register" class="btn btn-primary">
+                  <span>Register Free Entry</span> <span>🎟️</span>
+                </a>
+                <a href="#rules" class="btn btn-secondary">
+                  <span>Read Event Rules</span> <span>📋</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENT DETAILS SECTION -->
+    <section class="section event-details-section" id="eventDetails">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-sub-badge">📅 Event Specifications</span>
+          <h2 class="section-title">Event Schedule & Location Details</h2>
+          <p class="section-description">
+            Complete details for the Vinayaka Chavithi Laddu Event organized at Mattaparthi Vari Pallem.
+          </p>
+        </div>
+
+        <div class="details-grid">
+          <!-- Card 1: Event Name & Venue -->
+          <div class="detail-card glass-card">
+            <div class="card-icon-header">
+              <div class="detail-icon-box gold-icon">🏛️</div>
+              <span class="card-badge">Pandal Venue</span>
+            </div>
+            <h3 class="detail-card-title">Event & Location</h3>
+            <div class="info-block">
+              <p><strong>Event Name:</strong> Mattaparthi Vari Pallem</p>
+              <p><strong>Village / Town:</strong> Bandarulanka</p>
+              <p><strong>Mandapam Address:</strong> [Organizer to add exact Pandal street / ground location]</p>
+            </div>
+            <p class="card-subnote">📍 <em>Landmark details will be broadcasted to all registered participants.</em></p>
+          </div>
+
+          <!-- Card 2: Expected Participants -->
+          <div class="detail-card glass-card">
+            <div class="card-icon-header">
+              <div class="detail-icon-box orange-icon">👥</div>
+              <span class="card-badge">Participant Cap</span>
+            </div>
+            <h3 class="detail-card-title">Participation Limit</h3>
+            <p class="detail-card-desc">
+              Strict limit to ensure a well-coordinated community event and transparent registration:
+            </p>
+            <div class="stat-highlight-box">
+              <span class="stat-number">Below 100</span>
+              <span class="stat-label">Maximum Participants Allowed</span>
+            </div>
+            <p class="card-subnote">Registrations automatically close once the 99-participant cap is reached.</p>
+          </div>
+
+          <!-- Card 3: Key Dates -->
+          <div class="detail-card glass-card">
+            <div class="card-icon-header">
+              <div class="detail-icon-box maroon-icon">🗓️</div>
+              <span class="card-badge">Event Timings</span>
+            </div>
+            <h3 class="detail-card-title">Important Dates</h3>
+            <div class="info-block">
+              <p><strong>Event Date:</strong> [Organizer to add]</p>
+              <p><strong>Registration Closing:</strong> [Organizer to add]</p>
+              <p><strong>Prashadam Draw Ceremony:</strong> [Organizer to add timing, e.g., 08:00 PM IST]</p>
+            </div>
+            <p class="card-subnote">🔔 <em>All schedule updates will be posted on this portal.</em></p>
+          </div>
+
+          <!-- Card 4: Organizer Contact -->
+          <div class="detail-card glass-card">
+            <div class="card-icon-header">
+              <div class="detail-icon-box gold-icon">📞</div>
+              <span class="card-badge">Helpline</span>
+            </div>
+            <h3 class="detail-card-title">Organizer Contact</h3>
+            <div class="info-block">
+              <p><strong>Organizer:</strong> Mattaparthi Vari Pallem Committee</p>
+              <p><strong>Contact Person:</strong> [Organizer to add]</p>
+              <p><strong>Phone / WhatsApp:</strong> [Organizer to add]</p>
+            </div>
+            <p class="card-subnote">💬 <em>Reach out to the local committee for event inquiries.</em></p>
+          </div>
+
+          <!-- Card 5: Compliance & Entry Policy -->
+          <div class="detail-card glass-card highlight-border-card">
+            <div class="card-icon-header">
+              <div class="detail-icon-box orange-icon">⚖️</div>
+              <span class="card-badge badge-warning">Compliance Policy</span>
+            </div>
+            <h3 class="detail-card-title">Free Registration & Compliance</h3>
+            <div class="legal-fee-box">
+              <span class="fee-status-badge">Safe Community Prototype</span>
+              <p class="fee-text">
+                Entry Fee: <strong>Free Demo Participation</strong> (No payment collection or paid lottery).
+              </p>
+            </div>
+            <p class="legal-notice-text">
+              ⚠️ <em>Notice: In compliance with applicable regulations, this platform provides safe, free registration for demonstration. No paid entries or monetary transactions are conducted.</em>
+            </p>
+          </div>
+
+          <!-- Card 6: Transparency & Rules -->
+          <div class="detail-card glass-card">
+            <div class="card-icon-header">
+              <div class="detail-icon-box gold-icon">🛡️</div>
+              <span class="card-badge">Fairness</span>
+            </div>
+            <h3 class="detail-card-title">Event Rules & Integrity</h3>
+            <ul class="card-feature-list">
+              <li>✨ Open to local residents and visiting devotees.</li>
+              <li>✨ One registration per verified mobile number.</li>
+              <li>✨ Serial numbers generated in chronological order.</li>
+              <li>✨ 5 KG Laddu Prashadam handed over with honors.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REGISTRATION SECTION -->
+    <section class="section registration-section" id="register">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-sub-badge badge-prototype">✍️ Participant Registration</span>
+          <h2 class="section-title">Register for Event</h2>
+          <p class="section-description">
+            Complete the form below to receive your official registration reference for the Mattaparthi Vari Pallem 5 KG Laddu Event.
+          </p>
+        </div>
+
+        <!-- Compliance & Privacy Banner -->
+        <div class="prototype-banner" role="alert">
+          <div class="banner-icon">🛡️</div>
+          <div class="banner-text">
+            <strong>Community Notice & Privacy Protection:</strong> Free event registration. Your mobile number will be kept confidential and is NEVER publicly displayed on the participants list.
+          </div>
+        </div>
+
+        <div class="registration-layout">
+          <!-- Registration Form Card -->
+          <div class="form-card glass-card">
+            <form id="registrationForm" novalidate autocomplete="on">
+              <div class="form-header">
+                <h3 class="form-title">Enter Participant Details</h3>
+                <p class="form-subtitle">Mattaparthi Vari Pallem • Bandarulanka</p>
+              </div>
+
+              <!-- Full Name Field -->
+              <div class="form-group" id="nameGroup">
+                <label for="fullName" class="form-label">
+                  <span class="label-icon">👤</span> Full Name (భక్తుని పేరు) <span class="required-star">*</span>
+                </label>
+                <div class="input-wrap">
+                  <input 
+                    type="text" 
+                    id="fullName" 
+                    name="fullName" 
+                    class="form-control" 
+                    placeholder="e.g. Manikanta Mattaparthi" 
+                    required 
+                    minlength="2" 
+                    maxlength="60"
+                    pattern="^[a-zA-Z\s\.]+$"
+                    aria-describedby="nameError"
+                  >
+                </div>
+                <small class="error-msg" id="nameError" aria-live="polite"></small>
+              </div>
+
+              <!-- Mobile Number Field -->
+              <div class="form-group" id="phoneGroup">
+                <label for="phoneNumber" class="form-label">
+                  <span class="label-icon">📱</span> Mobile Number (మొబైల్ నంబర్) <span class="required-star">*</span>
+                </label>
+                <div class="input-wrap phone-input-wrap">
+                  <span class="country-prefix">+91</span>
+                  <input 
+                    type="tel" 
+                    id="phoneNumber" 
+                    name="phoneNumber" 
+                    class="form-control phone-control" 
+                    placeholder="98765 43210" 
+                    required 
+                    maxlength="10"
+                    pattern="^[6-9]\d{9}$"
+                    aria-describedby="phoneError"
+                  >
+                </div>
+                <small class="input-hint">10-digit Indian number (kept private; used solely for event notifications).</small>
+                <small class="error-msg" id="phoneError" aria-live="polite"></small>
+              </div>
+
+              <!-- Colony / Area (Optional) -->
+              <div class="form-group">
+                <label for="areaLocation" class="form-label">
+                  <span class="label-icon">🏡</span> Village / Colony Area
+                </label>
+                <div class="input-wrap">
+                  <input 
+                    type="text" 
+                    id="areaLocation" 
+                    name="areaLocation" 
+                    class="form-control" 
+                    placeholder="e.g. Bandarulanka Main Road" 
+                    maxlength="60"
+                  >
+                </div>
+              </div>
+
+              <!-- Mandatory Consent Checkbox -->
+              <div class="form-group consent-group" id="consentGroup">
+                <label class="checkbox-container">
+                  <input type="checkbox" id="consentCheckbox" name="consent" required aria-describedby="consentError">
+                  <span class="custom-checkmark"></span>
+                  <span class="checkbox-text">
+                    I confirm my participation, agree to the event rules, and acknowledge that this registration reference is for event participation and not a guaranteed prize claim. <span class="required-star">*</span>
+                  </span>
+                </label>
+                <small class="error-msg" id="consentError" aria-live="polite"></small>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitRegBtn">
+                  <span class="btn-text">Submit Registration</span>
+                  <span class="btn-icon">🎟️</span>
+                </button>
+              </div>
+
+              <div class="form-security-note">
+                <span>🔒 Privacy Assured • No Financial Data Collected</span>
+              </div>
+            </form>
+          </div>
+
+          <!-- Confirmation Card Section -->
+          <div class="ticket-preview-container">
+            <div class="ticket-wrapper" id="ticketWrapper">
+              <!-- Empty State before registration -->
+              <div class="ticket-empty-state" id="ticketEmptyState">
+                <div class="empty-icon">🎫</div>
+                <h4 class="empty-title">Registration Confirmation Pass</h4>
+                <p class="empty-desc">
+                  Submit the form to generate your serial number, official registration reference (e.g. <code>MMP-001</code>), and instant WhatsApp sharing card.
+                </p>
+                <div class="sample-badge">Mattaparthi Vari Pallem • Bandarulanka</div>
+              </div>
+
+              <!-- Generated Digital Ticket Confirmation Card -->
+              <div class="digital-ticket-card" id="digitalTicketCard" style="display: none;">
+                <div class="ticket-notch notch-left"></div>
+                <div class="ticket-notch notch-right"></div>
+                
+                <div class="ticket-inner-card">
+                  <!-- Ticket Header -->
+                  <div class="ticket-top">
+                    <div class="ticket-temple-badge">
+                      <span class="temple-icon">🛕</span>
+                      <span>MATTAPARTHI VARI PALLEM</span>
+                    </div>
+                    <span class="ticket-status-pill" id="ticketStatusPill">🟢 Registration Received</span>
+                  </div>
+
+                  <!-- Event Name -->
+                  <div class="ticket-event-name">
+                    <h3>5 KG LADDU EVENT 2026</h3>
+                    <p>బండారులంక • ప్రవేశ ధ్రువీకరణ పత్రం</p>
+                  </div>
+
+                  <div class="ticket-divider">
+                    <span class="divider-line"></span>
+                    <span class="divider-icon">🪔</span>
+                    <span class="divider-line"></span>
+                  </div>
+
+                  <!-- Prominent Registration Reference & Serial Box -->
+                  <div class="ticket-number-box">
+                    <span class="ticket-number-label">REGISTRATION REFERENCE</span>
+                    <div class="ticket-number-val" id="displayTicketId">MMP-001</div>
+                    <div class="ticket-serial-badge">
+                      <span>Serial Number: <strong id="displaySerialNo">001</strong></span>
+                    </div>
+                  </div>
+
+                  <!-- Metadata Grid -->
+                  <div class="ticket-meta-grid">
+                    <div class="ticket-meta-item">
+                      <span class="meta-label">PARTICIPANT NAME</span>
+                      <strong class="meta-value" id="displayName">Manikanta</strong>
+                    </div>
+                    <div class="ticket-meta-item">
+                      <span class="meta-label">LOCATION</span>
+                      <strong class="meta-value">Bandarulanka</strong>
+                    </div>
+                    <div class="ticket-meta-item">
+                      <span class="meta-label">PRIZE ITEM</span>
+                      <strong class="meta-value text-gold">5 KG Maha Laddu</strong>
+                    </div>
+                    <div class="ticket-meta-item">
+                      <span class="meta-label">REGISTRATION DATE</span>
+                      <strong class="meta-value" id="displayRegDate">22-Sep-2026</strong>
+                    </div>
+                  </div>
+
+                  <!-- Disclaimer note inside ticket -->
+                  <div class="ticket-disclaimer-box">
+                    <small>📌 <em>This registration reference is an event entry confirmation. It is not proof of payment or a guaranteed prize-winning ticket.</em></small>
+                  </div>
+
+                  <!-- Simulated Barcode & Stamp -->
+                  <div class="ticket-bottom-bar">
+                    <div class="simulated-barcode">
+                      <div class="barcode-lines"></div>
+                      <span class="barcode-text" id="displayBarcodeText">MMP-BANDARULANKA</span>
+                    </div>
+                    <div class="ticket-seal">
+                      <span>✓ VERIFIED</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="ticket-action-bar">
+                  <button type="button" class="action-btn btn-copy" id="copyRefBtn" aria-label="Copy registration reference">
+                    <span class="action-icon">📋</span>
+                    <span class="action-label">Copy Reference</span>
+                  </button>
+                  <button type="button" class="action-btn btn-whatsapp" id="whatsappShareBtn" aria-label="Share on WhatsApp">
+                    <span class="action-icon">💬</span>
+                    <span class="action-label">Share WhatsApp</span>
+                  </button>
+                  <button type="button" class="action-btn btn-print" id="printTicketBtn" aria-label="Print or save confirmation">
+                    <span class="action-icon">🖨️</span>
+                    <span class="action-label">Print / Save</span>
+                  </button>
+                </div>
+
+                <!-- Register Another Participant -->
+                <div class="new-entry-wrap text-center">
+                  <button type="button" class="link-btn" id="registerAnotherBtn">
+                    ➕ Register Another Participant
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERIAL-NUMBER-WISE PARTICIPANT LIST -->
+    <section class="section participants-section" id="participants">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-sub-badge">📋 Public Directory</span>
+          <h2 class="section-title">Serial-Wise Participant List</h2>
+          <p class="section-description">
+            Transparent sequential registration directory for Mattaparthi Vari Pallem, Bandarulanka.
+          </p>
+        </div>
+
+        <div class="participants-container glass-card">
+          <!-- Table Controls & Privacy Note -->
+          <div class="table-controls-bar">
+            <div class="search-box-wrap">
+              <span class="search-icon">🔍</span>
+              <input 
+                type="text" 
+                id="participantSearchInput" 
+                class="form-control search-control" 
+                placeholder="Search by participant name or reference (e.g. MMP-001)..." 
+                aria-label="Search participant list"
+              >
+            </div>
+            <div class="table-stats-pill">
+              <span>Total Registrations: <strong id="participantCount">0</strong> / 99 Max</span>
+            </div>
+          </div>
+
+          <!-- Privacy Notice -->
+          <div class="privacy-callout">
+            <span>🛡️ <strong>Privacy Protection:</strong> In accordance with data privacy best practices, contact numbers are strictly kept private and are never displayed on this public list.</span>
+          </div>
+
+          <!-- Responsive Table Container -->
+          <div class="table-responsive">
+            <table class="participants-table" id="participantsTable">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 15%;">S.No</th>
+                  <th scope="col" style="width: 40%;">Participant Name</th>
+                  <th scope="col" style="width: 25%;">Registration Reference</th>
+                  <th scope="col" style="width: 20%;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="participantsTableBody">
+                <!-- Dynamically populated by script.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State when no matches -->
+          <div class="table-empty-state" id="tableEmptyState" style="display: none;">
+            <div class="empty-icon-sm">🔍</div>
+            <p>No matching participants found. Enter details in the registration form above to add a participant.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMIN SYSTEM ARCHITECTURAL PREVIEW -->
+    <section class="section admin-preview-section" id="adminPreview">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-sub-badge badge-prototype">⚙️ Architectural Preview</span>
+          <h2 class="section-title">Admin System & Future Backend Plan</h2>
+          <p class="section-description">
+            Design preview for the Mattaparthi Vari Pallem committee management workflow.
+          </p>
+        </div>
+
+        <div class="admin-preview-box glass-card">
+          <!-- Architectural Transparency Notice -->
+          <div class="admin-architecture-notice">
+            <div class="notice-header">
+              <span class="notice-icon">ℹ️</span>
+              <h4>GitHub Pages Static Hosting Notice & Secure Backend Architecture</h4>
+            </div>
+            <p>
+              This website is hosted statically on <strong>GitHub Pages</strong>. Static frontends do not provide server-side databases or secure admin authentication. For an actual production multi-user system, client-side passwords must not be used. Instead, a dedicated backend (such as Firebase Authentication + Firestore, Supabase, or a Node.js/PostgreSQL service) should be connected with:
+            </p>
+            <ul class="admin-feature-tags">
+              <li>🔒 Role-Based Server Authentication (Admin / Staff)</li>
+              <li>🛡️ Encrypted Phone Number Storage with Audit Logs</li>
+              <li>📑 Server-Generated Sequential Serial Allocation</li>
+              <li>📤 Secure CSV / Excel Export with Permission Checks</li>
+            </ul>
+          </div>
+
+          <!-- Interactive Prototype Admin Dashboard Controls -->
+          <div class="admin-mock-dashboard">
+            <div class="admin-dash-header">
+              <h3>Admin View (Local Prototype Mode)</h3>
+              <div class="admin-actions">
+                <button type="button" class="btn btn-secondary btn-sm" id="exportCsvBtn">
+                  <span>📥 Export Permitted Records (CSV)</span>
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" id="clearLocalDataBtn">
+                  <span>🗑️ Reset Local Sample Data</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-stats-row">
+              <div class="admin-stat-card">
+                <span class="stat-title">Total Registered</span>
+                <span class="stat-value" id="adminTotalCount">0</span>
+              </div>
+              <div class="admin-stat-card">
+                <span class="stat-title">Available Slots</span>
+                <span class="stat-value" id="adminSlotsLeft">99</span>
+              </div>
+              <div class="admin-stat-card">
+                <span class="stat-title">Venue</span>
+                <span class="stat-value text-gold">Bandarulanka</span>
+              </div>
+              <div class="admin-stat-card">
+                <span class="stat-title">Prize Consecration</span>
+                <span class="stat-value text-saffron">5 KG Laddu</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WINNER ANNOUNCEMENT PLACEHOLDER -->
+    <section class="section winner-section" id="winner">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-sub-badge badge-gold">🏆 Results Portal</span>
+          <h2 class="section-title">Winner Announcement</h2>
+          <p class="section-description">
+            Mattaparthi Vari Pallem • Bandarulanka
+          </p>
+        </div>
+
+        <div class="winner-box-wrapper glass-card">
+          <div class="winner-stage">
+            <div class="trophy-podium">
+              <div class="podium-aura"></div>
+              <div class="grand-laddu-icon">🍯</div>
+              <div class="podium-pillar">
+                <span class="pillar-label">5 KG LADDU</span>
+              </div>
+            </div>
+
+            <div class="winner-status-content">
+              <div class="suspense-tag">
+                <span class="glow-indicator"></span>
+                <span>EVENT IN PROGRESS</span>
+              </div>
+              
+              <h3 class="winner-coming-title">Winner Announcement Coming Soon</h3>
+              
+              <p class="winner-coming-desc">
+                The official winner announcement will be conducted publicly at the Mattaparthi Vari Pallem mandapam during the festival Visarjan Pooja. Results will be updated here following the authorized committee draw.
+              </p>
+
+              <!-- Configurable Winner Placeholder Card -->
+              <div class="winner-placeholder-card">
+                <div class="placeholder-row">
+                  <span class="ph-label">🏆 Winning Reference:</span>
+                  <span class="ph-value ph-blur">[ MMP-XXX • Coming Soon ]</span>
+                </div>
+                <div class="placeholder-row">
+                  <span class="ph-label">👤 Blessed Devotee:</span>
+                  <span class="ph-value ph-blur">[ Winner Name to be Announced ]</span>
+                </div>
+                <div class="placeholder-row">
+                  <span class="ph-label">📍 Location:</span>
+                  <span class="ph-value">Bandarulanka</span>
+                </div>
+              </div>
+
+              <div class="transparency-pill">
+                <span>🛡️ 100% Impartial Community Event • No Pre-selected Winner</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FESTIVE FOOTER -->
+  <footer class="site-footer" id="contact">
+    <div class="container footer-container">
+      <div class="footer-grid">
+        <!-- Col 1: Brand & Sloka -->
+        <div class="footer-col brand-col">
+          <div class="footer-brand">
+            <span class="footer-om">ॐ</span>
+            <span class="footer-brand-title">Mattaparthi Vari Pallem</span>
+          </div>
+          <p class="footer-tagline">
+            Celebrating Vinayaka Chavithi with deep devotion and community unity in Bandarulanka.
+          </p>
+          <div class="telugu-sloka">
+            <p>వక్రతుండ మహాకాయ సూర్యకోటి సమప్రభ |<br>నిర్విఘ్నం కురు మే దేవ సర్వకార్యేషు సర్వదా ||</p>
+          </div>
+        </div>
+
+        <!-- Col 2: Event Details & Committee -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Event Committee</h4>
+          <ul class="footer-links-list">
+            <li><strong>Event:</strong> 5 KG Laddu Event</li>
+            <li><strong>Location:</strong> Bandarulanka</li>
+            <li><strong>Organizer:</strong> Mattaparthi Vari Pallem Committee</li>
+            <li><strong>Contact:</strong> [Organizer to add Contact]</li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Rules & Privacy Notice -->
+        <div class="footer-col">
+          <h4 class="footer-heading">Rules & Privacy Notice</h4>
+          <ul class="footer-rules-list">
+            <li>📜 Participation is limited to below 100 entries.</li>
+            <li>📜 Free registration prototype; no payment collected.</li>
+            <li>📜 Mobile numbers are strictly protected and never published.</li>
+            <li>📜 5 KG Laddu Prashadam handed over post ceremony.</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="footer-divider">
+
+      <!-- Bottom Bar -->
+      <div class="footer-bottom">
+        <p class="copyright-text">
+          © 2026 <strong>Mattaparthi Vari Pallem</strong>, Bandarulanka. All rights reserved. • గణపతి బప్పా మోరియా!
+        </p>
+        <p class="demo-note">
+          <small>GitHub Pages Compatible • Standalone Temporary Event Website</small>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
