@@ -489,16 +489,74 @@ This is a registration confirmation for the event. It is not proof of payment or
 
   if (clearLocalDataBtn) {
     clearLocalDataBtn.addEventListener('click', () => {
-      if (confirm('Clear all local registration records?')) {
-        saveParticipants([]);
-        try {
-          localStorage.removeItem('mmp_active_ticket');
-        } catch (e) {}
-        if (ticketEmptyState) ticketEmptyState.style.display = 'block';
-        if (digitalTicketCard) digitalTicketCard.style.display = 'none';
-        renderParticipantTable();
-        showToast('All registration records cleared.', '🗑️', 2500);
+      const currentList = getStoredParticipants();
+
+      if (currentList.length === 0) {
+        showToast('Participant directory is already clean (0 registrations).', 'ℹ️', 2500);
+        return;
       }
+
+      // Step 1: Initial Warning Dialog
+      const firstConfirm = confirm(
+        `⚠️ ADMIN RESET CONFIRMATION (Step 1 of 2)\n\n` +
+        `You are about to reset the participant directory.\n` +
+        `Current registrations: ${currentList.length} participant(s).\n\n` +
+        `An automatic safety backup CSV will be downloaded before clearing.\n` +
+        `Do you want to proceed to the confirmation step?`
+      );
+
+      if (!firstConfirm) return;
+
+      // Step 2: Explicit Verification Prompt
+      const verificationInput = prompt(
+        `🔒 FINAL VERIFICATION (Step 2 of 2)\n\n` +
+        `To prevent accidental data loss, please type "RESET" (without quotes) below to confirm:`
+      );
+
+      if (!verificationInput || verificationInput.trim().toUpperCase() !== 'RESET') {
+        showToast('Reset cancelled. Verification text did not match.', '🛡️', 3500);
+        return;
+      }
+
+      // Automatic safety backup before clearing
+      try {
+        let csvContent = 'data:text/csv;charset=utf-8,';
+        csvContent += 'Serial No,Participant Name,Registration Reference,Location,Status,Date\n';
+        currentList.forEach((row) => {
+          const nameClean = `"${row.name.replace(/"/g, '""')}"`;
+          csvContent += `${row.serialNo},${nameClean},${row.refId},${row.location},${row.status},${row.date}\n`;
+        });
+        const encodedUri = encodeURI(csvContent);
+        const backupLink = document.createElement('a');
+        backupLink.setAttribute('href', encodedUri);
+        backupLink.setAttribute('download', `Safety_Backup_Mattaparthi_Participants_${formatCurrentDate()}.csv`);
+        document.body.appendChild(backupLink);
+        backupLink.click();
+        document.body.removeChild(backupLink);
+      } catch (backupErr) {
+        console.warn('Backup export note', backupErr);
+      }
+
+      // Perform clean reset
+      saveParticipants([]);
+      try {
+        localStorage.removeItem('mmp_active_ticket');
+      } catch (e) {}
+
+      if (ticketEmptyState) ticketEmptyState.style.display = 'block';
+      if (digitalTicketCard) digitalTicketCard.style.display = 'none';
+      if (regForm) {
+        regForm.reset();
+        document.querySelectorAll('.form-group').forEach((g) => {
+          g.classList.remove('has-success', 'has-error');
+        });
+        document.querySelectorAll('.error-msg').forEach((e) => {
+          e.textContent = '';
+        });
+      }
+
+      renderParticipantTable();
+      showToast('✅ All records backed up and count safely reset to 0.', '🗑️', 4000);
     });
   }
 
